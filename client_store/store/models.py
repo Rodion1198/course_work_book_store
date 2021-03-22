@@ -91,7 +91,7 @@ class Cart(models.Model):
 
     owner = models.ForeignKey('Customer', null=True, verbose_name='Владелец', on_delete=models.CASCADE)
     books = models.ManyToManyField(CartProduct, blank=True, related_name='related_cart')
-    total_products = models.PositiveIntegerField(_(default=0))
+    total_products = models.PositiveIntegerField(default=0)
     final_price = models.DecimalField(max_digits=9, default=0, decimal_places=2, verbose_name='Общая цена')
     in_order = models.BooleanField(default=False)
     for_anonymous_user = models.BooleanField(default=False)
@@ -140,9 +140,9 @@ class Order(models.Model):
         choices=BUYING_TYPE_CHOICES,
         default=BUYING_TYPE_SELF
     )
-    comment = models.TextField(_(verbose_name='Комментарий к заказу', null=True, blank=True))   # noqa: DJ01
-    created_at = models.DateTimeField(_(auto_now=True, verbose_name='Дата создания заказа'))
-    order_date = models.DateField(_(verbose_name='Дата получения заказа', default=timezone.now))
+    comment = models.TextField(verbose_name='Комментарий к заказу', null=True, blank=True)   # noqa: DJ01
+    created_at = models.DateTimeField(auto_now=True, verbose_name='Дата создания заказа')
+    order_date = models.DateField(verbose_name='Дата получения заказа', default=timezone.now)
 
     def __str__(self):
         return str(self.id)
