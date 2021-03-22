@@ -136,3 +136,7 @@ dmypy.json
 graph.dot
 graph.png
 erd.dot
+
+store_venv/
+warehouse_venv/
+client_store/media
