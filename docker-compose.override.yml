@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: db
+    image: postgres
+    restart: on-failure
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - webnet
+    expose:
+      - 5432
+    env_file: ./config/.env
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: '123123'
+      POSTGRES_DB: 'dev_db'
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  warehouse_employee: &warehouse_employee
+    container_name: warehouse_employee
+    env_file: ./config/.env
+    build:
+      target: development_build
+      args:
+        DJANGO_ENV: 'dev'
+#        PROJECT_ROOT: 'warehouse_employee'
+    volumes:
+      - ./warehouse_employee:/code
+      - ./config:/config
+    environment:
+      DJANGO_DEBUG: 1
+    depends_on:
+      - db
+    command: sh /runserver.sh
+
+
+  client_store: &client_store
+    container_name: client_store
+    env_file: ./config/.env
+    build:
+      target: development_build
+      args:
+        DJANGO_ENV: 'dev'
+#          PROJECT_ROOT: 'client_store'
+    volumes:
+      - ./client_store:/code
+      - ./config:/config
+    environment:
+      DJANGO_DEBUG: 1
+    depends_on:
+      - db
+    command: sh /runserver.sh
+
+
+  nginx:
+    container_name: nginx
+    build:
+      target: development_build
+    ports:
+      - 8025:8025
+      - 5555:5555
+
+volumes:
+  db-data:

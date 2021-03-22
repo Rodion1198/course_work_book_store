@@ -1,0 +1,73 @@
+version: "3.8"
+
+services:
+
+  warehouse_employee: &warehouse_employee
+    container_name: warehouse_employee
+    build:
+      context: .
+      dockerfile: docker/backend_warehouse/Dockerfile
+    networks:
+      - webnet
+      - nginx_network
+    expose:
+      - 8000
+    environment:
+      DATABASE_PORT: '5432'
+    env_file:
+      - ./config/.env
+    restart: on-failure
+    command: sh /runserver.sh
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://0.0.0.0:8000/admin/login/" ]
+      interval: 1m
+      timeout: 5s
+      retries: 2
+
+
+  client_store: &client_store
+    container_name: client_store
+    build:
+      context: .
+      dockerfile: docker/backend_store/Dockerfile
+    networks:
+      - webnet
+      - nginx_network
+    expose:
+      - 8001
+    environment:
+      DATABASE_PORT: '5432'
+    env_file:
+      - ./config/.env
+    restart: on-failure
+    command: sh /runserver.sh
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://0.0.0.0:8000/admin/login/" ]
+      interval: 1m
+      timeout: 5s
+      retries: 2
+
+
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    restart: on-failure
+    networks:
+      - nginx_network
+    ports:
+      - 8000:8000
+      - 8001:8001
+    depends_on:
+      - warehouse_employee
+      - client_store
+    healthcheck:
+      test: [ "CMD-SHELL", "ps ax", "|" ,"grep -v grep", "|" ,"grep nginx",  "||", "exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  webnet:
+  nginx_network:
