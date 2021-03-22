@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Genre:</h3>
+
+    {% for genre in page_obj %}
+      <h4><li><a class="p-2 text-blue" href="{% url 'genre_detail_page' genre.id%}">{{ genre.name }}</a></li></h4>
+
+    {% empty %}
+      <h5>No genre yet.</h5>
+    {% endfor %}
+
+{% endblock %}

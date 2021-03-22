@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>{{ author.first_name }} {{ author.last_name }}</h3></li>
+
+
+{% if author.book_set.all %}
+<hr>
+
+        <div class="row">
+        {% for book in author.book_set.all %}
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="{% url 'book_detail' book.id %}"><img class="card-img-top" src="{{ book.image.url }}" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="{% url 'book_detail' book.id %}">{{ book.title }}</a>
+                </h4>
+                  <h5><a class="text-dark" href="{% url 'author_detail' book.author.id %}">{{ book.author.first_name }} {{ book.author.last_name }}</h5><a/>
+
+                    <h5>{{book.genre.all|join:", "}}</h5>
+
+                <h5>{{ book.price }} руб.</h5>
+        {% if user.is_authenticated %}
+            <a href="{% url 'add_to_cart' slug=book.slug %}">
+            <button class="btn btn-danger">Добавить в корзину</button>
+        {% else %}
+            <a href="{% url 'login' %}">
+            <button class="btn btn-danger">Войдите для покупки</button>
+        {% endif %}
+                  </a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+{% endif %}
+
+{% if not author.book_set.all %}
+    <hr>
+    <h3>Author's books: </h3>
+    <h3>Book not yet</h3>
+
+{% endif %}
+
+
+
+{% endblock %}

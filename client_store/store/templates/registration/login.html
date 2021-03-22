@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block content %}
+<div class="row" style="margin-bottom: 200px; margin-top: 160px">
+<div class="col-md-6 offset-md-3">
+    <h3 class="text-center">Авторизация</h3>
+    <hr>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" class="btn btn-success btn-block" value="Войти">
+
+<br/><br/>
+        Not Registered? Sign Up <a href="{% url 'registration' %}">Here...</a>
+    </form>
+</div>
+
+
+</div>
+{% endblock %}

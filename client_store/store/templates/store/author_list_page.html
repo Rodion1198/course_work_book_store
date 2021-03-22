@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Authors:</h3>
+<ul>
+
+    {% for author in page_obj %}
+      <li><h4><a class="p-2 text-blue" href="{% url 'author_detail' author.id %}">{{ author.first_name }} {{ author.last_name }}</a> <small>{{ author.date_of_birth }} - {{ author.date_of_death }}</small></h4>
+
+
+    {% empty %}
+      <h5>No authors yet.</h5>
+    {% endfor %}
+
+</ul>
+
+{% endblock %}

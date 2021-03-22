@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="row">
+    <div class="col-md-4">
+        <img src="{{ book.image.url }}" class="img-fluid">
+    </div>
+    <div class="col-md-8">
+        <h3>{{ book.title }}</h3>
+        <p>Цена: {{ book.price }} грн.</p>
+        <p>Описание: {{ book.description }}</p>
+        <hr>
+        {% if user.is_authenticated %}
+            <a href="{% url 'add_to_cart' slug=book.slug %}"><button class="btn btn-danger">Добавить в корзину</button></a>
+        {% else %}
+            <a href="{% url 'login' %}"><button class="btn btn-danger">Войдите для покупки</button></a>
+        {% endif %}
+    </div>
+    <p class="mt-4">Характеристики:</p>
+
+    <table class="table">
+  <tbody>
+    <tr>
+      <td>Aвторы</td>
+      <td><a href="{% url 'author_detail' book.author.id %}">{{ book.author }}</td></a>
+    </tr>
+     <tr>
+      <td>Издательство</td>
+      <td><a href="{% url 'publish_house_detail' book.publishing_house.id %}">{{ book.publishing_house }}</td></a>
+    </tr>
+      <tr>
+      <td>Год публикации</td>
+      <td>{{ book.publication_year }}</td>
+    </tr>
+      <tr>
+      <td>Жанр</td>
+       <td>{{ book.genre.all|join:", " }}</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+{% endblock %}
