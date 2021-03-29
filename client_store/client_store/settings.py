@@ -78,23 +78,15 @@ WSGI_APPLICATION = 'client_store.wsgi.application'
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get('POSTGRES_DB', default='store_db'),
+            'USER': os.environ.get('POSTGRES_USER', default='admin'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', default='password'),
+            'HOST': os.environ.get('POSTGRES_HOST', default='db'),
+            'PORT': "5432"
+        }
 }
-
-
-# DATABASES = {
-#     "default": {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'store_db',
-#         'USER': 'admin',
-#         'PASSWORD': 'password',
-#         'HOST': '127.0.0.1',
-#         'PORT': '5432',
-#     }
-# }
 
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
