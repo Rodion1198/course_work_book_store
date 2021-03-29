@@ -13,14 +13,27 @@ services:
       - 5432
     env_file: ./config/.env
     environment:
-      POSTGRES_USER: 'postgres'
-      POSTGRES_PASSWORD: '123123'
-      POSTGRES_DB: 'dev_db'
+      POSTGRES_USER: 'admin'
+      POSTGRES_PASSWORD: 'password'
+#      POSTGRES_DB: 'dev_db'
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres" ]
       interval: 10s
       timeout: 5s
       retries: 5
+
+#  pgadmin:
+#    container_name: pgadmin4_container
+#    image: dpage/pgadmin4
+#    restart: always
+#    networks:
+#      - webnet
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+#      PGADMIN_DEFAULT_PASSWORD: root
+#    ports:
+#      - "5050:80"
+
 
   warehouse_employee: &warehouse_employee
     container_name: warehouse_employee
@@ -29,7 +42,7 @@ services:
       target: development_build
       args:
         DJANGO_ENV: 'dev'
-#        PROJECT_ROOT: 'warehouse_employee'
+        PROJECT_ROOT: 'warehouse_employee'
     volumes:
       - ./warehouse_employee:/code
       - ./config:/config
@@ -47,7 +60,7 @@ services:
       target: development_build
       args:
         DJANGO_ENV: 'dev'
-#          PROJECT_ROOT: 'client_store'
+        PROJECT_ROOT: 'client_store'
     volumes:
       - ./client_store:/code
       - ./config:/config
@@ -58,6 +71,25 @@ services:
     command: sh /runserver.sh
 
 
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog:latest
+    command: [ "-smtp-bind-addr", "0.0.0.0:25" ]
+    user: root
+    restart: on-failure
+    networks:
+      - webnet
+      - nginx_network
+    expose:
+      - 25
+      - 8025
+    healthcheck:
+      test: [ "CMD", "echo", "|", "telnet", "127.0.0.1 25" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
   nginx:
     container_name: nginx
     build:
@@ -65,6 +97,9 @@ services:
     ports:
       - 8025:8025
       - 5555:5555
+    depends_on:
+      - mailhog
+
 
 volumes:
   db-data:

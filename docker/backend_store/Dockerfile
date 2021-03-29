@@ -21,14 +21,14 @@ ENV DJANGO_ENV=${DJANGO_ENV} \
 RUN apt-get update
 
 # Install system dependencies
-RUN apt-get -y install \
-    gcc \
-    gettext \
-    libxml2-dev \
-    libxslt-dev \
-    libgdal-dev \
-    libproj-dev \
-    libgeos-dev
+#RUN apt-get -y install \
+#    gcc \
+#    gettext \
+#    libxml2-dev \
+#    libxslt-dev \
+#    libgdal-dev \
+#    libproj-dev \
+#    libgeos-dev
 
 # Copy only requirements, to cache them in docker layer:
 WORKDIR /pysetup
