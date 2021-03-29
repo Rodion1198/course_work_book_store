@@ -17,49 +17,102 @@ class BookListView(CartMixin, generic.ListView):
     def get(self, request, *args, **kwargs):
 
         books = Book.objects.all()
+        author = Author.objects.all()
+        publishing_house = PublishingHouse.objects.all()
+        genre = Genre.objects.all()
         context = {
             'books': books,
+            'author': author,
+            'publishing_house': publishing_house,
+            'genre': genre,
             'cart': self.cart
         }
         return render(request, 'base.html', context)
 
 
-class BookDetailView(generic.DetailView):
+class BookDetailView(CartMixin, generic.DetailView):
     model = Book
     template_name = 'store/book_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['author'] = self.get_object().author.__class__.objects.all()
+        context['publishing_house'] = self.get_object().publishing_house.__class__.objects.all()
+        context['genre'] = Genre.objects.all()
+        context['cart'] = self.cart
+        return context
 
-class AuthorListView(generic.ListView):
+
+class AuthorListView(CartMixin, generic.ListView):
     model = Author
     paginate_by = 10
     template_name = 'store/author_list_page.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['author'] = Author.objects.all()
+        context['publishing_house'] = PublishingHouse.objects.all()
+        context['genre'] = Genre.objects.all()
+        context['cart'] = self.cart
+        return context
 
-class AuthorDetailView(generic.DetailView):
+
+class AuthorDetailView(CartMixin, generic.DetailView):
     model = Author
     template_name = 'store/author_detail_page.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cart'] = self.cart
+        return context
 
-class PublishingHouseListView(generic.ListView):
+
+class PublishingHouseListView(CartMixin, generic.ListView):
     model = PublishingHouse
     paginate_by = 10
     template_name = 'store/publish_house_list_page.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['author'] = Author.objects.all()
+        context['publishing_house'] = PublishingHouse.objects.all()
+        context['genre'] = Genre.objects.all()
+        context['cart'] = self.cart
+        return context
 
-class PublishingHouseDetailView(generic.DetailView):
+
+class PublishingHouseDetailView(CartMixin, generic.DetailView):
     model = PublishingHouse
     template_name = 'store/publish_house_detail_page.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cart'] = self.cart
+        return context
 
-class GenreListView(generic.ListView):
+
+class GenreListView(CartMixin, generic.ListView):
     model = Genre
     paginate_by = 10
     template_name = 'store/genre_list_page.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['author'] = Author.objects.all()
+        context['publishing_house'] = PublishingHouse.objects.all()
+        context['genre'] = Genre.objects.all()
+        context['cart'] = self.cart
+        return context
 
-class GenreDetailView(generic.DetailView):
+
+class GenreDetailView(CartMixin, generic.DetailView):
     model = Genre
     template_name = 'store/genre_detail_page.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cart'] = self.cart
+        return context
 
 
 class AddToCartView(CartMixin, generic.View):

@@ -45,7 +45,8 @@ class Book(models.Model):
     price = models.DecimalField(_('price'), max_digits=6, decimal_places=2)
     description = models.TextField(_("description"), blank=True)
     genre = models.ManyToManyField(Genre, blank=True, verbose_name=_("genre"))
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True, max_length=13, help_text=_("13 character ISBN number"))
+    quantity = models.PositiveIntegerField(_('Quantity'), default=1)
 
     def __str__(self):
         return self.title
