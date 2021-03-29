@@ -64,10 +64,24 @@
 
     <div class="col-lg-3 mt-5">
         <div class="list-group">
-
+        {% if author.count %}
+            <a href="{% url 'author_list' %}" class="list-group-item">Authors ({{ author.count }})</a>
+        {% else %}
             <a href="{% url 'author_list' %}" class="list-group-item">Authors</a>
+        {% endif %}
+
+        {% if publishing_house.count %}
+            <a href="{% url 'publish_house_list' %}" class="list-group-item">Publish Houses ({{ publishing_house.count }})</a>
+        {% else %}
             <a href="{% url 'publish_house_list' %}" class="list-group-item">Publish Houses</a>
+        {% endif %}
+
+        {% if genre.count %}
+            <a href="{% url 'genre_list' %}" class="list-group-item">Genres ({{ genre.count }})</a>
+        {% else %}
             <a href="{% url 'genre_list' %}" class="list-group-item">Genres</a>
+        {% endif %}
+
         </div>
 
       </div>
@@ -101,6 +115,7 @@
                     <h5>{{book.genre.all|join:", "}}</h5>
 
                 <h5>{{ book.price }} руб.</h5>
+{#                <h5>В наличии {{ book.quantity }} шт.</h5>#}
                {% if user.is_authenticated %}
                 <a href="{% url 'add_to_cart' slug=book.slug %}">
                   <button class="btn btn-danger">Добавить в корзину</button>

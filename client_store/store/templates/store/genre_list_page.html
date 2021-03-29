@@ -3,12 +3,16 @@
 {% block content %}
 
 <h3>Genre:</h3>
-
+<ul>
     {% for genre in page_obj %}
-      <h4><li><a class="p-2 text-blue" href="{% url 'genre_detail_page' genre.id%}">{{ genre.name }}</a></li></h4>
-
+        {% if genre.book_set.count %}
+            <li><h4><a class="p-2 text-blue" href="{% url 'genre_detail_page' genre.id %}">{{ genre.name }}</a><small>{{ genre.book_set.count }}</small></h4>
+        {% else %}
+            <li><h4>{{ genre.name }} <small>{{ genre.book_set.count }}</small></h4>
+        {% endif %}
     {% empty %}
       <h5>No genre yet.</h5>
     {% endfor %}
+</ul>
 
 {% endblock %}

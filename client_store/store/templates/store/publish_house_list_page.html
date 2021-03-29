@@ -4,15 +4,16 @@
 
 <h3>Publish Houses:</h3>
 <ul>
-{#  <div class='jumbotron'>#}
     {% for publish_house in page_obj %}
-      <li><h4><a class="p-2 text-blue" href="{% url 'publish_house_detail' publish_house.id %}">{{ publish_house.name }}</a></h4>
-
+        {% if publish_house.book_set.count %}
+            <li><h4><a class="p-2 text-blue" href="{% url 'publish_house_detail' publish_house.id %}">{{ publish_house.name }}</a> <small>{{ publish_house.book_set.count }}</small></h4>
+        {% else %}
+            <li><h4>{{ publish_house.name }} <small>{{ publish_house.book_set.count }}</small></h4>
+        {% endif %}
 
     {% empty %}
       <h5>No Publish house yet.</h5>
     {% endfor %}
-{#  </div>#}
 </ul>
 
 {% endblock %}
