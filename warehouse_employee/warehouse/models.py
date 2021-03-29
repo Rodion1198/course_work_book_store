@@ -37,7 +37,7 @@ class Book(models.Model):
     price = models.DecimalField(_('price'), max_digits=6, decimal_places=2)
     description = models.TextField(_("description"), blank=True)
     genre = models.ManyToManyField(Genre, blank=True, verbose_name=_("genre"))
-    slug = models.SlugField(_(unique=True, blank=True))
+    slug = models.SlugField(unique=True, blank=True, max_length=13, help_text=_("13 character unique number"))
 
     class Meta:
         ordering = ['title', 'author']
@@ -53,21 +53,40 @@ class Order(models.Model):
         STATUS_READY = 2, _('is ready')
         STATUS_COMPLETED = 3, _('completed')
 
-    shop_order_id = models.IntegerField(_('shop order id'), help_text='Shop order id')
-    order_date = models.CharField(_('order date'), max_length=20)
-    shipped_date = models.DateField(_('shipped date'), help_text='Date when order moved to completed status')
+    email = models.EmailField(max_length=254)
+    first_name = models.CharField(_("first name"), max_length=100)
+    last_name = models.CharField(_("last name"), max_length=100)
+    phone = models.CharField(_("phone number"), max_length=100)
+    price = models.DecimalField(_('price'), max_digits=8, decimal_places=2)
     status = models.PositiveSmallIntegerField(
         choices=OrderStatus.choices, default=OrderStatus.STATUS_IN_PROGRESS, blank=True, help_text=_('Order status')
     )
 
     def __str__(self):
-        return f'{self.shop_order_id}'
+        return f'{self.email} order'
 
 
-class OrderItem(models.Model):
+class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
     book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField(_('quantity'), help_text='Books quantity')
 
     def __str__(self):
-        return f"{self.id} ({self.order.shop_order_id})"
+        return f"{self.id} ({self.order.id})"
+
+
+class BookInstance(models.Model):
+
+    class SellStatus(models.IntegerChoices):
+        IN_STOCK = 1, _('In stock')
+        SOLD = 2, _('Sold')
+
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
+    status = models.PositiveSmallIntegerField(
+        choices=SellStatus.choices, default=SellStatus.IN_STOCK, blank=True, help_text=_('Book status')
+    )
+    order_product = models.ForeignKey(OrderProduct, on_delete=models.CASCADE, null=True, blank=True,
+                                      related_name='in_order_product')
+
+    def __str__(self):
+        return f"{self.id} ({self.book.title})"
