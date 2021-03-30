@@ -77,12 +77,22 @@ WSGI_APPLICATION = 'warehouse_employee.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get('POSTGRES_DB', default='warehouse_db'),
+            'USER': os.environ.get('POSTGRES_USER', default='admin'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', default='password'),
+            'HOST': os.environ.get('POSTGRES_HOST', default='db'),
+            'PORT': "5432"
+        }
 }
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "mailhog"
+EMAIL_PORT = "25"
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
+EMAIL_USE_SSL = False
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

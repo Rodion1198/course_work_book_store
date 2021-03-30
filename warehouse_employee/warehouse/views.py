@@ -25,6 +25,6 @@ class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
 
 
-class OrderItemViewSet(viewsets.ModelViewSet):
+class OrderProductViewSet(viewsets.ModelViewSet):
     queryset = OrderProduct.objects.all().order_by('order')
     serializer_class = OrderProductSerializer

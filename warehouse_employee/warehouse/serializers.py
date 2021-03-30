@@ -9,7 +9,7 @@ class BookInstanceSerializer(serializers.ModelSerializer):
         fields = ('id', 'book', 'order_product', 'status',)
 
 
-class BookSerializer(serializers.ModelSerializer):
+class BookSerializer(serializers.HyperlinkedModelSerializer):
     book = BookInstanceSerializer(source="bookinstance_set", many=True)
 
     class Meta:
@@ -26,9 +26,9 @@ class OrderProductSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    order_products = OrderProductSerializer(source="orderproduct_set", many=True)
+    # order_products = OrderProductSerializer(source="orderproduct_set", many=True)
 
     class Meta:
         model = Order
         fields = ['id', 'email', 'first_name',
-                  'last_name', 'phone', 'price', 'status', 'order_products']
+                  'last_name', 'phone', 'price', 'status']
