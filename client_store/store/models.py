@@ -1,8 +1,11 @@
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
+from django_lifecycle import LifecycleModelMixin, hook, AFTER_UPDATE
 
 User = get_user_model()
 
@@ -101,7 +104,7 @@ class Cart(models.Model):
         return str(self.id)
 
 
-class Order(models.Model):
+class Order(LifecycleModelMixin, models.Model):
 
     STATUS_NEW = 'new'
     STATUS_IN_PROGRESS = 'in_progress'
@@ -127,6 +130,7 @@ class Order(models.Model):
     first_name = models.CharField(max_length=255, verbose_name='Имя')
     last_name = models.CharField(max_length=255, verbose_name='Фамилия')
     phone = models.CharField(max_length=20, verbose_name='Телефон')
+    email = models.EmailField(max_length=100, verbose_name='Почта')
     cart = models.ForeignKey(Cart, verbose_name='Корзина', on_delete=models.CASCADE, null=True, blank=True)
     address = models.CharField(max_length=1024, verbose_name='Адрес', null=True, blank=True)   # noqa: DJ01
     status = models.CharField(
@@ -147,3 +151,13 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+    @hook(AFTER_UPDATE, when='status', is_now="new")
+    def order_status_create_email(self):
+        send_mail(
+            "Your order was create",
+            "Your order was create successfully!",
+            "admin@admin.com",
+            [f'{self.email}'],
+            fail_silently=False
+        )

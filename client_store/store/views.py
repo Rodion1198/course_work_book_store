@@ -193,6 +193,7 @@ class MakeOrderView(CartMixin, View):
             new_order.first_name = form.cleaned_data['first_name']
             new_order.last_name = form.cleaned_data['last_name']
             new_order.phone = form.cleaned_data['phone']
+            new_order.email = form.cleaned_data['email']
             new_order.address = form.cleaned_data['address']
             new_order.buying_type = form.cleaned_data['buying_type']
             new_order.order_date = form.cleaned_data['order_date']
