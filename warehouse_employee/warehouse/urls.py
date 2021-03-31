@@ -1,19 +1,13 @@
-from django.conf.urls import url
-from django.urls import include
-
-from rest_framework import routers
+from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
 
 from . import views
 
-router = routers.DefaultRouter()
-
-router.register(r'orders', views.OrderViewSet)
-router.register(r'order_products', views.OrderProductViewSet)
-router.register(r'books', views.BookViewSet)
-router.register(r'book_instances', views.BookInstanceViewSet)
-
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('book/', views.BookList.as_view()),
+    path('order/', views.OrderCreate.as_view()),
+
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

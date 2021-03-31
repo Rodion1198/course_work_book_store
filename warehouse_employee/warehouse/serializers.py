@@ -1,34 +1,51 @@
 from rest_framework import serializers
 
-from .models import Book, BookInstance, Order, OrderProduct
+from .models import Author, Book, BookInstance, Genre, Order, PublishingHouse
 
 
-class BookInstanceSerializer(serializers.ModelSerializer):
+class AuthorSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = BookInstance
-        fields = ('id', 'book', 'order_product', 'status',)
+        model = Author
+        fields = ['id', 'first_name', 'last_name', 'bio', 'date_of_birth', 'date_of_death']
+
+
+class GenreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Genre
+        fields = ['id', 'name']
+
+
+class PublishingHouseSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PublishingHouse
+        fields = ['id', 'name']
 
 
 class BookSerializer(serializers.HyperlinkedModelSerializer):
-    book = BookInstanceSerializer(source="bookinstance_set", many=True)
+    author = AuthorSerializer(read_only=True)
+    genre = GenreSerializer(read_only=True, many=True)
+    publishing_house = PublishingHouseSerializer(read_only=True)
 
     class Meta:
         many = True
         model = Book
-        fields = ['id', 'title', 'price', 'description',
-                  'publishing_house', 'author', 'genre', 'slug', 'book']
+        fields = ('id', 'title', 'price', 'description',
+                  'publishing_house', 'author', 'genre', 'slug')
 
 
-class OrderProductSerializer(serializers.ModelSerializer):
+class BookInstanceSerializer(serializers.ModelSerializer):
+    book = BookSerializer(read_only=True)
+
     class Meta:
-        model = OrderProduct
-        fields = ('id', 'order', 'book', 'quantity',)
+        model = BookInstance
+        fields = ('id', 'book', 'status')
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    # order_products = OrderProductSerializer(source="orderproduct_set", many=True)
 
     class Meta:
         model = Order
-        fields = ['id', 'email', 'first_name',
-                  'last_name', 'phone', 'price', 'status']
+        fields = ('id', 'book', 'email', 'first_name', 'last_name', 'phone', 'price', 'status')

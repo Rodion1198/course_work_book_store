@@ -1,30 +1,21 @@
-from django.http import HttpResponse
+from rest_framework import generics
+from rest_framework import mixins
 
-from rest_framework import viewsets
-
-from .models import Book, BookInstance, Order, OrderProduct
-from .serializers import BookInstanceSerializer, BookSerializer, OrderProductSerializer, OrderSerializer
-
-
-def index(request):
-    return HttpResponse("Hello, world the second project!!!!")
+from .models import BookInstance, Order
+from .serializers import BookInstanceSerializer, OrderSerializer
 
 
-class BookViewSet(viewsets.ModelViewSet):
-    queryset = Book.objects.all().order_by('title')
-    serializer_class = BookSerializer
-
-
-class BookInstanceViewSet(viewsets.ModelViewSet):
-    queryset = BookInstance.objects.all().order_by('book__title')
+class BookList(mixins.ListModelMixin, generics.GenericAPIView):
+    queryset = BookInstance.objects.all()
     serializer_class = BookInstanceSerializer
 
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
-class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all().order_by('id')
+
+class OrderCreate(mixins.CreateModelMixin, generics.GenericAPIView):
+    queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
-
-class OrderProductViewSet(viewsets.ModelViewSet):
-    queryset = OrderProduct.objects.all().order_by('order')
-    serializer_class = OrderProductSerializer
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
