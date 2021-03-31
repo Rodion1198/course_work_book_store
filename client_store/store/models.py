@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from django_lifecycle import AFTER_UPDATE, LifecycleModelMixin, hook
+from django_lifecycle import AFTER_UPDATE, LifecycleModelMixin, hook, AFTER_CREATE
 
 User = get_user_model()
 
@@ -64,7 +64,7 @@ class Book(models.Model):
     display_genre.short_description = 'Genre'
 
 
-class Customer(models.Model):
+class Customer(LifecycleModelMixin, models.Model):
 
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
     phone = models.CharField(max_length=20, verbose_name='Номер телефона', null=True, blank=True)   # noqa: DJ01
@@ -73,6 +73,16 @@ class Customer(models.Model):
 
     def __str__(self):
         return "Покупатель: {} {}".format(self.user.first_name, self.user.last_name)
+
+    @hook(AFTER_CREATE)
+    def order_status_create_email(self):
+        send_mail(
+            "Your registration",
+            "Your register was successfully!",
+            "admin@admin.com",
+            [f'{self.user.email}'],
+            fail_silently=False
+        )
 
 
 class CartProduct(models.Model):
