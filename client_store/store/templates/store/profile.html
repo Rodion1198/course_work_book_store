@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 
 <h3 class="mt-3 mb-5"> Заказы пользователя {{ request.user.username }}</h3>
@@ -59,7 +59,11 @@
                                             {% for item in order.cart.books.all %}
                                                 <tr>
                                                     <th scope="row"> {{ item.book.title }}</th>
-                                                    <td class="w-25"><img src="{{ item.book.image.url }}" class="img-fluid"></td>
+                                                    {% if item.book.image %}
+                                                        <td class="w-25"><img src="{{ item.book.image.url }}" class="img-fluid"></td>
+                                                    {% else %}
+                                                        <td class="w-25"><img src="{% static 'store/images/default_book.jpg' %}" class="img-fluid">>
+                                                    {% endif %}
                                                     <td><strong>{{ item.book.price }}</strong> грн.</td>
                                                     <td>{{ item.qty }}</td>
                                                     <td>{{ item.final_price }} грн.</td>

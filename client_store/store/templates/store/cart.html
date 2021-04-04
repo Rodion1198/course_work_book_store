@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
+
 <h3 class="text-center mt-5 mb-5">Ваша корзина {% if not cart.books.count %}пуста{% endif %}</h3>
 {% if messages %}
     {% for message in messages %}
@@ -20,7 +22,7 @@
       <th scope="col">Изображение</th>
       <th scope="col">Цена</th>
       <th scope="col">Кол-во</th>
-        <th scope="col">Общая цена</th>
+      <th scope="col">Общая цена</th>
       <th scope="col">Действие</th>
     </tr>
   </thead>
@@ -28,14 +30,18 @@
     {% for item in cart.books.all %}
         <tr>
           <th scope="row">{{ item.book.title }}</th>
-          <td class="w-25"><img src="{{ item.book.image.url }}" class="img-fluid"></td>
+            {% if item.book.image %}
+                <td class="w-25"><img src="{{ item.book.image.url }}" class="img-fluid"></td>
+            {% else %}
+                <td class="w-25"><img src="{% static 'store/images/default_book.jpg' %}" class="img-fluid">>
+            {% endif %}
           <td>{{ item.content_object.price }} грн.</td>
           <td>
-            <form action="{% url 'change_qty' slug=item.book.slug %}" method="POST">
-              {% csrf_token %}
-              <input type="number" class="form-control" name="qty" style="width: 70px;" min="1" value="{{ item.qty }}">
-              <br>
-              <input type="submit" class="btn btn-primary" value="Изменить кол-во">
+                <form action="{% url 'change_qty' slug=item.book.slug %}" method="POST">
+                {% csrf_token %}
+                <input type="number" class="form-control" name="qty" style="width: 70px;" min="1" value="{{ item.qty }}">
+                <br>
+                <input type="submit" class="btn btn-primary" value="Изменить кол-во">
             </form>
           </td>
             <td>{{ item.final_price }} грн.</td>

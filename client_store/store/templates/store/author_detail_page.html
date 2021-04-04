@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
 
 <h3>{{ author.first_name }} {{ author.last_name }}</h3></li>
@@ -13,7 +13,11 @@
 
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
-              <a href="{% url 'book_detail' book.id %}"><img class="card-img-top" src="{{ book.image.url }}" alt=""></a>
+                {% if book.image %}
+                    <a href="{% url 'book_detail' book.id %}"><img class="card-img-top" src="{{ book.image.url }}" alt=""></a>
+                {% else %}
+                    <a href="{% url 'book_detail' book.id %}"> <img src="{% static 'store/images/default_book.jpg' %}" class="card-img"> </a>
+                {% endif %}
               <div class="card-body">
                 <h4 class="card-title">
                   <a href="{% url 'book_detail' book.id %}">{{ book.title }}</a>

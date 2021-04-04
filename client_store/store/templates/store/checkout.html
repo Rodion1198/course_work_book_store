@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% load crispy_forms_filters %}
-
+{% load static %}
 {% block content %}
+
 <h3 class="text-center mt-5 mb-5">Оформление заказа</h3>
 <table class="table">
   <thead>
@@ -17,7 +18,11 @@
     {% for item in cart.books.all %}
         <tr>
           <th scope="row">{{ item.book.title }}</th>
-          <td class="w-25"><img src="{{ item.book.image.url }}" class="img-fluid"></td>
+          {% if item.book.image %}
+                <td class="w-25"><img src="{{ item.book.image.url }}" class="img-fluid"></td>
+            {% else %}
+                <td class="w-25"><img src="{% static 'store/images/default_book.jpg' %}" class="img-fluid">>
+            {% endif %}
           <td>{{ item.book.price }} грн.</td>
           <td>{{ item.qty }}</td>
             <td>{{ item.final_price }} грн.</td>
