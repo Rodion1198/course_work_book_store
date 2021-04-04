@@ -5,13 +5,16 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import generic
 from django.views.generic.base import View
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 from .forms import LoginForm, OrderForm, RegistrationForm
 from .mixins import CartMixin
-from .models import Author, Book, CartProduct, Customer, Genre, Order, PublishingHouse
+from .models import Author, Book, CartProduct, Customer, Genre, Order, PublishingHouse, Cart
 from .utils import recalc_cart
 
 
+# @method_decorator(cache_page(20), name='dispatch')
 class BookListView(CartMixin, generic.ListView):
 
     def get(self, request, *args, **kwargs):
@@ -43,6 +46,7 @@ class BookDetailView(CartMixin, generic.DetailView):
         return context
 
 
+# @method_decorator(cache_page(20), name='dispatch')
 class AuthorListView(CartMixin, generic.ListView):
     model = Author
     paginate_by = 10
@@ -67,6 +71,7 @@ class AuthorDetailView(CartMixin, generic.DetailView):
         return context
 
 
+# @method_decorator(cache_page(20), name='dispatch')
 class PublishingHouseListView(CartMixin, generic.ListView):
     model = PublishingHouse
     paginate_by = 10
@@ -91,6 +96,7 @@ class PublishingHouseDetailView(CartMixin, generic.DetailView):
         return context
 
 
+# @method_decorator(cache_page(20), name='dispatch')
 class GenreListView(CartMixin, generic.ListView):
     model = Genre
     paginate_by = 10

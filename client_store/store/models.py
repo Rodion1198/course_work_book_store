@@ -54,6 +54,11 @@ class Book(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def image_url(self):
+        if self.image and hasattr(self.image, 'url'):
+            return self.image.url
+
     def get_absolute_url(self):
         return reverse('book_detail', args=[self.id])
 
