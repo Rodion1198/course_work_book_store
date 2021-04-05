@@ -24,7 +24,7 @@ class PublishingHouseSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
-class BookSerializer(serializers.HyperlinkedModelSerializer):
+class BookBasicSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
     genre = GenreSerializer(read_only=True, many=True)
     publishing_house = PublishingHouseSerializer(read_only=True)
@@ -36,12 +36,29 @@ class BookSerializer(serializers.HyperlinkedModelSerializer):
                   'publishing_house', 'author', 'genre', 'slug')
 
 
-class BookInstanceSerializer(serializers.ModelSerializer):
-    book = BookSerializer(read_only=True)
+class BookBasicInstanceSerializer(serializers.ModelSerializer):
+    book = BookBasicSerializer(read_only=True)
 
     class Meta:
         model = BookInstance
         fields = ('id', 'book', 'status')
+
+
+class BookSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        many = True
+        model = Book
+        fields = ['id', 'title', 'price', 'description',
+                  'publishing_house', 'author', 'genre', 'slug']
+
+
+class BookInstanceSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        many = True
+        model = BookInstance
+        fields = ['id', 'book', 'status']
 
 
 class OrderSerializer(serializers.ModelSerializer):

@@ -140,3 +140,4 @@ erd.dot
 store_venv/
 warehouse_venv/
 client_store/media
+client_store/static/store/images/

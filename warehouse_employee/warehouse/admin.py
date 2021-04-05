@@ -5,7 +5,7 @@ from .models import Author, Book, BookInstance, Genre, Order, PublishingHouse
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
-    fields = ['first_name', 'last_name', 'bio', 'date_of_birth']
+    fields = ['first_name', 'last_name', 'bio', 'date_of_birth', 'date_of_death']
     list_display = ('first_name', 'last_name')
     search_fields = ('first_name', 'last_name')
 
