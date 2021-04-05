@@ -18,7 +18,7 @@ if [ "$DJANGO_ENV" = 'dev' ]; then
 #  echo "Importing test data"
 #  python /code/manage.py loaddata test_data.json
   echo "Run server"
-  exec  python -Wd manage.py runserver 0.0.0.0:8000
+  exec  python -Wd manage.py runserver 0.0.0.0:8002
 else
   echo "ERROR: DJANGO_ENV isn't valid"
   echo 'Application will not start.'

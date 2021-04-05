@@ -11,7 +11,7 @@ services:
       - webnet
       - nginx_network
     expose:
-      - 8000
+      - 8002
     environment:
       DATABASE_PORT: '5432'
     env_file:
@@ -48,6 +48,58 @@ services:
       retries: 2
 
 
+  redis:
+    container_name: redis
+    image: redis:5.0.6-alpine
+    restart: on-failure
+    networks:
+      - webnet
+    expose:
+      - 6379
+    volumes:
+      - redis:/var/lib/redis/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-h", "localhost", "ping" ]
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.8.0-alpine
+    restart: on-failure
+    networks:
+      - webnet
+    expose:
+      - 4369
+      - 5671
+      - 5672
+      - 15672
+      - 25672
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 5s
+      timeout: 15s
+      retries: 1
+
+  celery:
+    <<: *client_store
+    container_name: celery
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+    expose: [ ]
+    networks:
+      - webnet
+    environment:
+      C_FORCE_ROOT: 'true'
+      CHECK_WEB: 'true'
+    healthcheck:
+      test: [ "CMD-SHELL", "ps ax", "|" ,"grep -v grep", "|" ,"grep celery",  "||", "exit 1" ]
+      interval: 1m
+      timeout: 5s
+      retries: 2
+
+
   nginx:
     container_name: nginx
     build:
@@ -57,7 +109,7 @@ services:
     networks:
       - nginx_network
     ports:
-      - 8000:8000
+      - 8002:8002
       - 8001:8001
     depends_on:
       - warehouse_employee
@@ -71,3 +123,7 @@ services:
 networks:
   webnet:
   nginx_network:
+
+volumes:
+  rabbitmq_data:
+  redis:
