@@ -14,12 +14,15 @@ coreschema==0.0.4
 Django==3.1.7
 django-crispy-forms==1.11.2
 django-debug-toolbar==3.2
-django-environ==0.4.5
 django-lifecycle==0.9.1
 django-redis==4.12.1
 django-silk==4.1.0
-django-split-settings==1.0.1
 djangorestframework==3.12.2
+flake8==3.9.0
+flake8-builtins==1.5.3
+flake8-django==1.1.1
+flake8-import-order==0.18.1
+flake8-print==4.0.0
 gprof2dot==2021.2.21
 idna==2.10
 itypes==1.2.0
@@ -32,7 +35,7 @@ Pillow==8.1.2
 prompt-toolkit==3.0.18
 psycopg2-binary==2.8.6
 pycodestyle==2.7.0
-pyflakes==2.2.0
+pyflakes==2.3.1
 Pygments==2.8.1
 python-dateutil==2.8.1
 pytz==2021.1
