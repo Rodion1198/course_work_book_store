@@ -5,12 +5,12 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import generic
 from django.views.generic.base import View
-from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page   # NOQA
+from django.utils.decorators import method_decorator   # NOQA
 
 from .forms import LoginForm, OrderForm, RegistrationForm
 from .mixins import CartMixin
-from .models import Author, Book, CartProduct, Customer, Genre, Order, PublishingHouse, Cart
+from .models import Author, Book, CartProduct, Customer, Genre, Order, PublishingHouse
 from .utils import recalc_cart
 
 

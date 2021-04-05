@@ -12,9 +12,11 @@ click-repl==0.1.6
 Django==3.1.7
 django-crispy-forms==1.11.1
 django-debug-toolbar==3.2
+django-environ==0.4.5
 django-lifecycle==0.9.1
 django-redis==4.12.1
 django-silk==4.1.0
+django-split-settings==1.0.1
 gprof2dot==2021.2.21
 idna==2.10
 Jinja2==2.11.3
