@@ -32,8 +32,8 @@ class BookBasicSerializer(serializers.ModelSerializer):
     class Meta:
         many = True
         model = Book
-        fields = ('id', 'title', 'price', 'description',
-                  'publishing_house', 'author', 'genre', 'slug')
+        fields = ('id', 'title', 'price', 'publication_year', 'image', 'description',
+                  'publishing_house', 'author', 'genre', 'slug', 'quantity')
 
 
 class BookBasicInstanceSerializer(serializers.ModelSerializer):
@@ -49,8 +49,8 @@ class BookSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         many = True
         model = Book
-        fields = ['id', 'title', 'price', 'description',
-                  'publishing_house', 'author', 'genre', 'slug']
+        fields = ['id', 'title', 'price', 'publication_year', 'image', 'description',
+                  'publishing_house', 'author', 'genre', 'slug', 'quantity']
 
 
 class BookInstanceSerializer(serializers.HyperlinkedModelSerializer):

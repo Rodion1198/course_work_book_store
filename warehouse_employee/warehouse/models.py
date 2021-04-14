@@ -35,12 +35,15 @@ class Genre(models.Model):
 
 class Book(models.Model):
     title = models.CharField(_("title"), max_length=100)
+    publication_year = models.IntegerField(_('year'))
     publishing_house = models.ForeignKey(PublishingHouse, on_delete=models.CASCADE, null=True)
+    image = models.ImageField(null=True, blank=True, upload_to='images/')
     author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True)
     price = models.DecimalField(_('price'), max_digits=6, decimal_places=2)
     description = models.TextField(_("description"), blank=True)
     genre = models.ManyToManyField(Genre, blank=True, verbose_name=_("genre"))
     slug = models.SlugField(unique=True, blank=True, max_length=13, help_text=_("13 character unique number"))
+    quantity = models.PositiveIntegerField(_('Quantity'), default=1)
 
     class Meta:
         ordering = ['title', 'author']

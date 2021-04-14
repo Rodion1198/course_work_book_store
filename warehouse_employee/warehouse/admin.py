@@ -19,8 +19,8 @@ class PublishingHouseAdmin(admin.ModelAdmin):
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    fields = ['title', 'publishing_house',
-              'author', 'price', 'description', 'genre', 'slug']
+    fields = ['title', 'publishing_house', 'publication_year', 'image',
+              'author', 'price', 'description', 'genre', 'slug', 'quantity']
     search_fields = ('title',)
     list_display = ('title', 'author')
     list_filter = ('author', 'publishing_house', 'genre')
