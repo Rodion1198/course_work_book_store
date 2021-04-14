@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'store.apps.StoreConfig',
+    'django_celery_results',
     'crispy_forms',
     'silk'
 
@@ -137,8 +138,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
 
+STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -154,6 +155,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # silk
 SILKY_PYTHON_PROFILER = True
 
+
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -165,11 +167,13 @@ CACHES = {
 }
 
 
+# celery
+# CELERY_DEBUG = False
 # CELERY_TASK_TRACK_STARTED = True
 # CELERY_TASK_TIME_LIMIT = 30 * 60
-# CELERY_RESULT_BACKEND = 'db'
-CELERY_BROKER_URL = 'amqp://rabbitmq:5672'
+# CELERY_RESULT_BACKEND = 'django-db'
+CELERY_BROKER_URL = 'amqp://rabbitmq'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
-# CELERY_TIMEZONE = 'UTC'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
