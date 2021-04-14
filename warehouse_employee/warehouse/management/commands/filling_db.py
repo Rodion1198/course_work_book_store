@@ -1,8 +1,10 @@
 import random
 
 from django.core.management.base import BaseCommand
+
 from faker import Faker
-from warehouse.models import Author, Genre, PublishingHouse, Book, BookInstance
+
+from warehouse.models import Author, Book, BookInstance, Genre, PublishingHouse
 
 
 fake = Faker()

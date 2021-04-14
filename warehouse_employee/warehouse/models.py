@@ -37,7 +37,7 @@ class Book(models.Model):
     title = models.CharField(_("title"), max_length=100)
     publication_year = models.IntegerField(_('year'))
     publishing_house = models.ForeignKey(PublishingHouse, on_delete=models.CASCADE, null=True)
-    image = models.ImageField(null=True, blank=True, upload_to='images/')
+    image = models.ImageField(null=True, blank=True, upload_to='images/')   # noqa: DJ01
     author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True)
     price = models.DecimalField(_('price'), max_digits=6, decimal_places=2)
     description = models.TextField(_("description"), blank=True)

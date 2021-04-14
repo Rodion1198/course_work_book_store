@@ -2,7 +2,7 @@ from celery import shared_task
 
 import requests
 
-from .models import Author, Book, PublishingHouse, Genre
+from .models import Author, Book, Genre, PublishingHouse
 
 
 @shared_task
